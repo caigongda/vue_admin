@@ -1,0 +1,194 @@
+<template>
+	<div>
+		<el-row style="text-align: left;">
+			<el-button 
+				type="primary" 
+				size="medium"
+				@click="dialogFormVisible=true;">
+				添加
+			</el-button>
+		</el-row>
+		<el-row>
+		    <el-table
+		      :data="tableData"
+		      v-loading="isloaddata"
+		      align="left"
+		      style="width: 100%">
+		      <el-table-column
+		        label="序号">
+		        <template 
+		        	slot-scope="scope">
+		        	<span>{{scope.row.id}}</span>
+		        </template>
+		      </el-table-column>
+		      <el-table-column
+		        label="姓名">
+		        <template 
+		        	slot-scope="scope">
+		        	<span>{{scope.row.name}}</span>
+		        </template>
+		      </el-table-column>
+		      <el-table-column
+		        label="内容">
+		        <template 
+		        	slot-scope="scope">
+		        	<span>{{scope.row.content}}</span>
+		        </template>
+		      </el-table-column>
+			    <el-table-column
+		        label="操作">
+		        <template
+		        	slot-scope="scope">
+		        	<el-button type="primary" icon="el-icon-edit" circle
+		        	@click="editOne(scope.row.id)"></el-button>
+		        	<el-button type="danger" icon="el-icon-delete" circle
+		        	@click="delOne(scope.row.id)"></el-button>
+		        </template>
+		      	</el-table-column>
+		    </el-table>
+		    <div class="pub-footer-page">
+		    	<el-pagination
+				  layout="total, prev, pager, next"
+				  :total="total"
+				  :page-size="query.limit"
+				  :current-page="query.page"
+				  @current-change="pageChange">
+				</el-pagination>
+		    </div>
+		</el-row>
+
+		<el-dialog 
+			:title="title[iscreate]" 
+			:fullscreen="true"
+			custom-class="pub-admin-dialog"
+			:visible.sync="dialogFormVisible">
+		  <el-form
+		  	ref="mainform"
+		  	:model="form">
+		    <el-form-item 
+		    	label="姓名"
+		    	prop="name">
+		      	<el-input 
+		      	v-model="form.name" 
+		      	auto-complete="off">
+		      	</el-input>
+		    </el-form-item>
+		    <el-form-item 
+		    	label="内容"
+		    	prop="content">
+		      	<el-input 
+		      	v-model="form.content" 
+		      	auto-complete="off">
+		      	</el-input>
+		    </el-form-item>
+		  </el-form>
+		  <div slot="footer" class="dialog-footer">
+		    <el-button @click="dialogFormVisible = false;resetform('mainform')">取 消</el-button>
+		    <el-button type="primary" @click="addData" v-if="iscreate==0">确 定</el-button>
+		    <el-button type="primary" @click="saveData" v-else>保 存</el-button>
+		  </div>
+		</el-dialog>
+	</div>
+</template>
+<script>
+	export default{
+		data(){
+			return{
+				tableData:[],
+				dialogFormVisible:false,
+				form:{
+					name:"",
+					content:"",
+				},
+				title:["创建","编辑"],
+				iscreate:0,
+				isloaddata:false,
+				total:1,
+				query:{
+					page:1,
+					limit:1
+				}
+			}
+		},
+		mounted(){
+			this.fetchData();
+		},
+		methods:{
+			resetform(forname){
+				const set=this.$refs;
+				set[forname].resetFields();
+			},
+			fetchData(){
+				this.isloaddata=true;
+				this.$axios.get(this.$api.selAll,{params:Object.assign({ID:"1"},this.query)}).then(res=>{
+					this.tableData=res.data.data;
+					this.total=res.data.total;
+					this.isloaddata=false;
+				})
+			},
+			addData(){
+				this.iscreate=0;
+				this.$axios.post(this.$api.addOne,this.$qs.stringify(this.form)).then(res=>{
+					if (res.data) {
+						this.$message({
+							type:"success",
+							message:"添加成功！"
+						});
+							this.dialogFormVisible=false;
+							this.fetchData();
+					}else{
+						this.$message({
+							type:"warning",
+							message:"网络错误！"
+						})
+					}
+					this.resetform('mainform')
+				})
+			},
+			delOne(id){
+				this.$axios.post(this.$api.delOne,this.$qs.stringify({id:id})).then(res=>{
+					if (res.data) {
+						this.$message({
+							type:"success",
+							message:"删除成功！"
+						});
+						this.fetchData();
+					}
+				})
+			},
+			editOne(id){
+				this.iscreate=1;
+				this.curId=id;
+				this.$axios.post(this.$api.editOne,this.$qs.stringify({id:this.curId})).then(res=>{
+					this.form.name=res.data.name;
+					this.form.content=res.data.content;
+				}).then(()=>{
+					this.dialogFormVisible=true;
+				})
+			},
+			saveData(){
+				this.$axios.post(this.$api.addOne,this.$qs.stringify({...{id:this.curId},...this.form})).then(res=>{
+					if (res.data==true) {
+						this.$message({
+							type:"success",
+							message:"修改成功！"
+						});
+					};
+					this.dialogFormVisible=false;
+					this.resetform('mainform');
+					this.fetchData();
+				})
+			},
+			pageChange(val){
+				this.query.page=val;
+				this.fetchData();
+			}
+		}
+	}
+</script>
+<style>
+.pub-footer-page{
+	margin-top: 10px;
+	text-align: right;
+}
+</style>

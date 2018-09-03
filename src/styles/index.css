@@ -1,0 +1,24 @@
+body{
+	margin:0;
+}
+.pub-admin-dialog{
+	text-align: center;
+}
+.pub-admin-dialog .el-dialog__header{
+	width: 70%;
+	margin:0 auto;
+}
+.pub-admin-dialog .el-dialog__body{
+	width: 70%;
+	margin:0 auto;
+}
+.pub-admin-dialog .el-dialog__footer{
+	width: 70%;
+	margin:0 auto;
+}
+.pub-admin-dialog .el-form-item__label{
+	font-weight: 700;
+}
+.pub-aside{
+	height: calc(100vh - 60px)
+}
