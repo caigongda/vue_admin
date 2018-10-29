@@ -1,26 +1,45 @@
-const Index = () => import('@/components/Index/index')
+const Index = () => import('@/components/Main/index');
+const NumberSel = () => import('@/components/pages/numberSel');
+const NewsCenter = () => import('@/components/pages/newsCenter');
+const Contact = () => import('@/components/pages/contact');
+const membercenter = () => import('@/components/Pages/membercenter');
 const navrouter=[
 	{
-		path: '/a',
-      	name: '导航一',
-      	icon:'el-icon-tickets',
+		path: '/index',
+      	name: '首页',
       	component: Index,
-      	children:[
-      		{
-      			path:"/a/a",
-      			name:"子导航一",
-      			icon:'el-icon-tickets',
-      			component:Index,
-      			children:[
-		      		{
-		      			path:"/a",
-		      			name:"子子导航一",
-		      			icon:'el-icon-tickets',
-		      			component:Index,
-		      		}
-      			]
-      		}
-      	]
-	}
+            curIndex:"/index"
+	},
+      {
+            path: '/numberSel',
+            name: '选号大厅',
+            component: NumberSel,
+            curIndex:"/numberSel"
+      },
+      {
+            path: '/netStore',
+            name: '网络商城',
+            redirect: '/index',
+            component: Index,
+            curIndex:"/netStore"
+      },
+      {
+            path: '/newsCenter',
+            name: '新闻中心',
+            component: NewsCenter,
+            curIndex:"/newsCenter"
+      },
+      {
+            path: '/contact',
+            name: '联系我们',
+            component: Contact,
+            curIndex:"/contact"
+      },
+      {
+            path: '/membercenter',
+            name: '会员中心',
+            component: membercenter,
+            curIndex:"/membercenter"
+      }
 ]
 export default navrouter

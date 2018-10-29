@@ -1,6 +1,5 @@
 import router from './router/index'// 路由
 import store from './store/index'
-
 router.beforeEach((to,from,next)=>{
 	let timer=setInterval(()=>{
 		let Progress=store.getters.GetPercent;
@@ -9,7 +8,16 @@ router.beforeEach((to,from,next)=>{
 		}else{
 			store.dispatch('Setprogress',Progress+1);
 		}
-	})
+	});
+	let userinfo=window.localStorage.getItem('userinfo');
+	/*if (to.path=="/membercenter") {
+		if (userinfo) {
+  			this.$router.push({path:path})
+  		}else{
+  			alert("您还没有登录！");
+			next({path:"/index"});
+  		}
+	}*/
 	next();
 });
 

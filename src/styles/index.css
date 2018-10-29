@@ -22,3 +22,37 @@ body{
 .pub-aside{
 	height: calc(100vh - 60px)
 }
+.app-header-wrap{
+	background: #fff;
+	padding: 0 !important;
+}
+.text-hide{
+	overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap
+}
+@font-face {
+  font-family: 'iconfont';  /* project id 882101 */
+  src: url('//at.alicdn.com/t/font_882101_6tz6841trdc.eot');
+  src: url('//at.alicdn.com/t/font_882101_6tz6841trdc.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_882101_6tz6841trdc.woff') format('woff'),
+  url('//at.alicdn.com/t/font_882101_6tz6841trdc.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_882101_6tz6841trdc.svg#iconfont') format('svg');
+}
+.icon{
+	font-family:"iconfont";
+	font-size:16px;
+　　  font-style:normal;
+　　  -webkit-font-smoothing: antialiased;
+　　  -webkit-text-stroke-width: 0.2px;
+　　  -moz-osx-font-smoothing: grayscale;
+}
+.icon-user::before{content: "\e600";color: #909399;}
+.icon-pass::before{content: "\e623";color: #909399;}
+.unselectable {
+   -moz-user-select: -moz-none;
+   -khtml-user-select: none;
+   -webkit-user-select: none;
+   -ms-user-select: none;
+   user-select: none;
+}

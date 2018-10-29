@@ -1,47 +1,14 @@
 <template>
-	<el-menu
-      class="el-menu-vertical-demo"
-      @open="handleOpen"
-      :router="true"
-      :default-active="defaultActive"
-      @close="handleClose">
-      <el-menu-item index="/main">
-        <i class="el-icon-document"></i>
-        <span slot="title">概览</span>
-      </el-menu-item>
-      <el-menu-item index="/content">
-        <i class="el-icon-setting"></i>
-        <span slot="title">内容</span>
-      </el-menu-item>
-      <template v-for="(item,index) in navrouter">
-	      <el-submenu :index="item.path" v-if="item.children" :key="index">
-	        <template slot="title">
-	          <i :class="item.icon"></i>
-	          <span>{{item.name}}</span>
-	        </template>
-	        <template v-for="(child,index) in item.children">
-	        <el-submenu :index="child.path" v-if="child.children" :key="index">
-	          <template slot="title">
-	          	<i :class="child.icon"></i>
-	          	<span>{{child.name}}</span>
-	      	  </template>
-	        	<template v-for="(childchild,index) in child.children">
-		        	<el-menu-item :index="childchild.path" :key="index" style="padding-left: 70px">
-			          <i :class="childchild.icon"></i>
-			          <span>{{childchild.name}}</span>
-			        </el-menu-item>
-	        	</template>
-	        </el-submenu>
-	        <el-menu-item v-else :index="child.path" style="padding-left: 70px">
-	        	<template slot="title">
-		          <i :class="child.icon"></i>
-		          <span>{{child.name}}</span>
-		        </template>
-	        </el-menu-item>
-	        </template>
-	      </el-submenu>
-      </template>
-    </el-menu>
+	<el-container class="app-nav-wrap">
+		<div 
+			class="app-nav-item" 
+			v-for="(item,index) in navrouter" 
+			:key="index"
+			:class="{activenav:defaultActive==item.name}"
+			@click="changeNav(index,item.path)">
+			{{item.name}}
+		</div>
+	</el-container>
 </template>
 <script>
 import navrouter from "@/router/navbar"
@@ -49,22 +16,56 @@ import navrouter from "@/router/navbar"
 		data(){
 			return{
 				navrouter:navrouter,
-				//defaultActive:"/main"
 			}
 		},
 		computed:{
 			defaultActive(){
-				return this.$route.path
+				return this.$route.name
 			}
 		},
 		mounted(){
-			
+			console.log(this.$route.path)
 		},
 		methods: {
-	      handleOpen(key, keyPath) {
-	      },
-	      handleClose(key, keyPath) {
+	      changeNav(index,path){
+	      	if (path=="/membercenter") {
+	      		if (this.getuserinfo()) {
+	      			this.$router.push({path:path})
+	      		}else{
+	      			this.$message({
+						type:"warning",
+						message:"您还没有登录！"
+					});
+					//this.$router.push({path:'/index'});
+					return;
+	      		}
+	      	}
+	      	this.$router.push({path:path})
 	      }
 	    }
 	}
 </script>
+<style lang="scss">
+$bg:#F32613;
+$activebg:#D02629;
+.app-nav-wrap{
+	height:40px;
+	width:100%;
+	min-width:1280px !important;
+	background:$bg;
+	justify-content: center;
+	box-shadow: 0 4px 8px #999;
+}
+.app-nav-item{
+	width:200px;
+	height:100%;
+	display:flex;
+	justify-content:center;
+	align-items:center;
+	color:#fff;
+	cursor:pointer;
+}
+.app-nav-item:hover,.activenav{
+	background:$activebg;
+}
+</style>
