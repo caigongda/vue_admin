@@ -67,7 +67,6 @@
 		          callback(new Error('用户名不符合规则哦！'));
 		        } else {
 				this.$axios.post(this.$api.isrepeatname,this.$qs.stringify({nickname:value})).then(res=>{
-					console.log(res);
 					if (res.data.status==200) {
 						callback(new Error('用户名已存在！'));
 					}else{
@@ -173,6 +172,8 @@
 						          message: '注册成功',
 						          type: 'success'
 						        });
+						        this.resetForm('register');
+						        this.$router.push({path:"/login"});
           					}
           				})
           			}else {

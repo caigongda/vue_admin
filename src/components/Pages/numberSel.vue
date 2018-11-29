@@ -26,6 +26,20 @@
 							</ul>
 						</el-row>
 						<el-row class="search-common" v-loading="istype">
+							<span class="search-name">运营商：</span>
+							<ul>
+								<li :class="{searchSeled:curoperator==''}"
+								 @click="curoperator='';query.operator_id='';getresult();">全部</li>
+								<li
+									v-for="(item,index) in operatorarr" 
+									:key="index"
+									:class="{searchSeled:curoperator==item.id}"
+									@click="seloperator(item.id)">
+									{{item.name}}
+								</li>
+							</ul>
+						</el-row>
+						<el-row class="search-common" v-loading="istype">
 							<span class="search-name">号码类型：</span>
 							<ul>
 								<li :class="{searchSeled:curtype==''}"
@@ -110,6 +124,7 @@ import Specilnum from "@/components/pubcomponents/specilnum";
 				total:0,
 				numberthree:[],
 				numbertype:[],
+				operatorarr:[],
 				pricerange:[
 					{id:"0,100",name:"100元以下"},
 					{id:"100,500",name:"100-500元"},
@@ -122,6 +137,7 @@ import Specilnum from "@/components/pubcomponents/specilnum";
 				query:{
 					three_id:"",
 					phonetype_id:"",
+					operator_id:"",
 					price:"",
 					page:1,
 					pagecount:15,
@@ -132,6 +148,7 @@ import Specilnum from "@/components/pubcomponents/specilnum";
 				curthree:"",
 				curtype:"",
 				currange:"",
+				curoperator:"",
 			}
 		},
 		computed:{
@@ -150,14 +167,15 @@ import Specilnum from "@/components/pubcomponents/specilnum";
 					this.istype=false;
 					this.numberthree=res.data.threearr;
 					this.numbertype=res.data.phonetypearr;
+					this.operatorarr=res.data.operatorarr;
 				})
 			},
 			getresult(){
 				this.isresult=true;
 				this.$axios.post(this.$api.selnumber,this.$qs.stringify(this.query)).then(res=>{
 					this.isresult=false;
-					this.selresult=res.data;
-					this.total=res.data.length;
+					this.selresult=res.data.info;
+					this.total=res.data.count;
 				})
 			},
 			handleSizeChange(val){//每页容量切换
@@ -169,18 +187,31 @@ import Specilnum from "@/components/pubcomponents/specilnum";
 				this.getresult();
 			},
 			selthree(id){
+				this.query.page=1;
+				this.query.pagecount=15;
 				this.query.three_id=id;
 				this.curthree=id;
 				this.getresult();
 			},
 			seltype(id){
+				this.query.page=1;
+				this.query.pagecount=15;
 				this.query.phonetype_id=id;
 				this.curtype=id;
 				this.getresult();
 			},
 			selrange(id){
+				this.query.page=1;
+				this.query.pagecount=15;
 				this.query.price=id;
 				this.currange=id;
+				this.getresult();
+			},
+			seloperator(id){
+				this.query.page=1;
+				this.query.pagecount=15;
+				this.query.operator_id=id;
+				this.curoperator=id;
 				this.getresult();
 			},
 			isNumber(){

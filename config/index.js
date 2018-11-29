@@ -12,7 +12,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
         '/api': {
-          target: 'http://140.143.12.187:80',  //目标接口域名
+          target: 'http://127.0.0.1:80',  //目标接口域名
           changeOrigin: true,  //是否跨域
           pathRewrite: {
             '^/api': '/citest'   //重写接口
@@ -52,7 +52,15 @@ module.exports = {
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-
+    proxyTable: {
+        '/api': {
+          target: 'http://api.haomawz.com',  //目标接口域名
+          changeOrigin: true,  //是否跨域
+          pathRewrite: {
+            '^/api': '/'   //重写接口
+          }
+        }
+    },
     /**
      * Source Maps
      */

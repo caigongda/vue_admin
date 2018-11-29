@@ -24,7 +24,7 @@ import navrouter from "@/router/navbar"
 			}
 		},
 		mounted(){
-			console.log(this.$route.path)
+			
 		},
 		methods: {
 	      changeNav(index,path){

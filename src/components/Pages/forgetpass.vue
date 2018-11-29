@@ -43,11 +43,11 @@
 				<div class="step-wrap step-two" v-show="curstep==3">
 					<div class="forget-question">
 						<label>新密码：</label>
-						<el-input type="text" v-model="newpass" autocomplete="off"></el-input>
+						<el-input type="password" v-model="newpass" autocomplete="off"></el-input>
 					</div>
 					<div class="forget-answer">
 						<label>确认密码：</label>
-						<el-input type="text" v-model="renewpass" autocomplete="off"></el-input>
+						<el-input type="password" v-model="renewpass" autocomplete="off"></el-input>
 					</div>
 					<div class="btn-wrap">
 						<el-button style="margin-top: 12px;" @click="surepass">确定</el-button>
@@ -77,7 +77,7 @@
 						{ required: true, message: '密码不能为空'}
 					]
 				},
-				question:"密保问题",
+				question:"",
 				answer:"",
 				newpass:"",
 				renewpass:"",
@@ -93,12 +93,22 @@
 			stepone(formName){
 				this.$refs[formName].validate((valid) => {
           			if (valid) {
-          				this.curstep=2;
+          				this.$axios.post(this.$api.checkNumber,this.$qs.stringify({nickname:this.forgetform.username})).then(res=>{
+          					if (res.data.status==200) {
+          						this.curstep=2;
+          						this.question=res.data.problem;
+          					}else{
+          						this.$message({
+						          message: '用户名不存在',
+						          type: 'warning'
+						        });
+          					}
+          				})
           			}else {
-			            this.$message({
+			            /*this.$message({
 				          message: '恭喜你，这是一条成功消息',
 				          type: 'success'
-				        });
+				        });*/
 			            return false;
 			        }
           		})
@@ -111,7 +121,16 @@
 			        });
 			        return;
 				}else{
-					this.curstep=3;
+					this.$axios.post(this.$api.checkAnswer,this.$qs.stringify({nickname:this.forgetform.username,answer:this.answer})).then(res=>{
+      					if (res.data.status==200) {
+      						this.curstep=3;
+      					}else{
+      						this.$message({
+					          message: '答案错误',
+					          type: 'warning'
+					        });
+      					}
+      				})
 				}
 			},
 			surepass(){
@@ -128,8 +147,31 @@
 			        });
 			        return;
 				}else{
-
+					this.$axios.post(this.$api.editpassword,this.$qs.stringify({nickname:this.forgetform.username,password:this.newpass})).then(res=>{
+						if (res.data) {
+							this.$message({
+					          message: '修改成功',
+					          type: 'warning'
+					        });
+					        this.curstep=1;
+					        this.resettext();
+					        this.$router.push({path:"/index"});
+						}else{
+							this.$message({
+					          message: '修改失败',
+					          type: 'warning'
+					        });
+						}
+					})
 				}
+			},
+			resettext(){
+				this.resetForm('forgetform');
+				this.forgetform.username="";
+				this.question="";
+				this.answer="";
+				this.newpass="";
+				this.renewpass="";
 			}
 		}
 	}

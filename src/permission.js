@@ -10,14 +10,13 @@ router.beforeEach((to,from,next)=>{
 		}
 	});
 	let userinfo=window.localStorage.getItem('userinfo');
-	/*if (to.path=="/membercenter") {
+	if (to.path=="/membercenter") {
 		if (userinfo) {
-  			this.$router.push({path:path})
+  			next();
   		}else{
-  			alert("您还没有登录！");
-			next({path:"/index"});
+			next(false)
   		}
-	}*/
+	}
 	next();
 });
 

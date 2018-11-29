@@ -1,20 +1,24 @@
 const api={
 	selAll:"/api/index.php/welcome",
-	getBanner:"/api/index.php/number/Banner",//轮播
-	login:"/api/index.php/Login/Index",//登录
-	numberkind:"/api/index.php/number/Numberkind",//首页号码种类
-	specilnumber:"/api/index.php/number/Specilnumber",
-	getNews:"/api/index.php/number/GetNews",
-	getNumInfo:"/api/index.php/number/GetNumInfo",
-	getallNews:"/api/index.php/number/GetallNews",
-	viewNews:"/api/index.php/number/ViewNews",
-	getType:"/api/index.php/number/GetType",//获取类型
-	selnumber:"/api/index.php/number/Selnumber",
-	searchnumber:"/api/index.php/number/Searchnumber",
-	addNumber:"/api/index.php/number/AddNumber",
-	addMember:"/api/index.php/number/AddMember",
-	isrepeatname:"/api/index.php/number/Isrepeatname",
-	freshMember:"/api/index.php/number/FreshMember",
-	getOrders:"/api/index.php/number/GetOrders",
+	getBanner:"/api/index.php/Number/banner",//轮播
+	login:"/api/index.php/Login/index",//登录
+	numberkind:"/api/index.php/Number/numberkind",//首页号码种类
+	specilnumber:"/api/index.php/Number/specilnumber",
+	getNews:"/api/index.php/Number/getNews",
+	getNumInfo:"/api/index.php/Number/getNumInfo",
+	getallNews:"/api/index.php/Number/getallNews",
+	viewNews:"/api/index.php/Number/viewNews",
+	getType:"/api/index.php/Number/getType",//获取类型
+	selnumber:"/api/index.php/Number/selnumber",
+	searchnumber:"/api/index.php/Number/searchnumber",
+	addNumber:"/api/index.php/Number/addNumber",
+	addMember:"/api/index.php/Number/addMember",
+	isrepeatname:"/api/index.php/Number/isrepeatname",
+	freshMember:"/api/index.php/Number/freshMember",
+	getOrders:"/api/index.php/Number/getOrders",
+	checkNumber:"/api/index.php/Number/checkNumber",
+	checkAnswer:"/api/index.php/Number/checkAnswer",
+	editpassword:"/api/index.php/Number/editpassword",
+	getUrl:"/api/index.php/Number/getUrl",
 }
 export default api

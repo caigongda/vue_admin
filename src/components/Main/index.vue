@@ -3,7 +3,7 @@
 		<div class="carousel-wrap">
 			<el-carousel>
 			    <el-carousel-item v-for="(item, index) in indexImg" :key="index" class="img-car">
-			      <img :src="item.bannerimage">
+			      <img :src="adminurl+item.bannerimage">
 			    </el-carousel-item>
 			</el-carousel>
 			<div class="index-login-wrap" v-if="!userinfo">
@@ -44,6 +44,9 @@
 					<el-row class="card-common">
 						<el-row class="card-header-common">友情链接</el-row>
 						<el-row class="card-con-common">
+							<ul class="friend-url-wrap" v-loading="isfurl">
+								<li v-if="furls.length>0" v-for="(item,index) in furls" :key="index" @click="gotourl(item.url)">{{item.name}}</li>
+							</ul>
 					  	</el-row>
 					</el-row>
 				</el-col>
@@ -129,6 +132,7 @@ import Specilnum from "@/components/pubcomponents/specilnum";
 		components:{Pubtab,Specilnum},
 		data(){
 			return{
+				adminurl:"http://admin.haomawz.com",
 				loginform:{
 					username:"",
 					password:"",
@@ -146,14 +150,16 @@ import Specilnum from "@/components/pubcomponents/specilnum";
 		        indexImg:[],
 		        islogin:false,
 		        isnumber:false,
+		        furls:[],
+		        isfurl:false,
 			}
 		},
 		created(){
 			this.getBanner();
 		},
 		mounted(){
-			console.log(this.getuserinfo());
 			this.getnumber();
+			this.getUrl();
 		},
 		computed:{
 			userinfo(){
@@ -161,6 +167,14 @@ import Specilnum from "@/components/pubcomponents/specilnum";
 			}
 		},
 		methods:{
+			getUrl(){
+				this.isfurl=true;
+				this.$axios.post(this.$api.getUrl).then(res=>{
+					this.isfurl=false;
+					this.furls=res.data;
+					this.$store.dispatch('Seturl',res.data);
+				})
+			},
 			getBanner(){
 				this.$axios.post(this.$api.getBanner).then(res=>{
 					this.indexImg=res.data;
@@ -278,6 +292,9 @@ import Specilnum from "@/components/pubcomponents/specilnum";
 			pageChange(val){
 				this.query.page=val;
 				this.fetchData();
+			},
+			gotourl(url){
+				window.open(url);
 			}
 		}
 	}
@@ -449,6 +466,27 @@ $activebg:#D02629;
 	img{
 		width:100%;
 		height:100%;
+	}
+}
+.friend-url-wrap{
+	list-style:none;
+	margin:0;
+	padding:0;
+	min-height:50px;
+	display:flex;
+	flex-wrap:wrap;
+	li{
+		margin-bottom:5px;
+		cursor:pointer;
+		width:45%;
+		overflow:hidden;
+		text-overflow:ellipsis;
+		white-space:nowrap;
+		margin-right:2%;
+		min-width:0;
+		&:hover{
+			color:$bg;
+		}
 	}
 }
 }

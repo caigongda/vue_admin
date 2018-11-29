@@ -6,7 +6,7 @@
 	  			<span>
 	  				<span v-if="userinfo">您好：
 	  					<span style="color:#F32613">{{userinfo.nickname}}</span>
-	  					<span @click="membercenter">会员中心</span>
+	  					<span @click="membercenter" style="margin:0 10px;cursor: pointer;">会员中心</span>
 	  				</span>
 	  				<span class="member-login" v-if="!userinfo" @click="gotologin">[会员登录]</span>
 	  				<span class="member-regist" v-if="!userinfo" @click="gotoregist">|[免费注册]|</span>
@@ -17,8 +17,8 @@
 	  	</el-container>
 	  	<el-container class="header-logo-wrap">
 	  		<div class="w1200">
-	  			<div class="logo-img">
-	  				<img src="https://job.10086.cn/images/logo.jpg">
+	  			<div class="logo-img" @click="gotoindex">
+	  				<img src="@/assets/logo.png">
 	  			</div>
 	  			<div>
 	  				<el-input placeholder="输入你想要的号码" v-model="number">
@@ -50,6 +50,9 @@
 			},
 			gotoregist(){
 				this.$router.push({path:"/register"})
+			},
+			gotoindex(){
+				this.$router.push({path:"/index"})
 			},
 			isNumber(){
 				let phoneReg = /^[0-9]+$/;
@@ -114,6 +117,7 @@ $bg:#F32613;
 		width: 220px;
     	height: 70px;
     	background:#ddd;
+    	cursor:pointer;
     	img{
     		width:100%;
     		height:100%;

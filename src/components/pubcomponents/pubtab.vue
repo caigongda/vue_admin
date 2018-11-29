@@ -1,20 +1,20 @@
 <template>
 <el-row>
 	<el-tabs type="border-card" stretch>
-	  <el-tab-pane label="网站公告">
-	  	<ul class="tab-con-ul" v-loading="isnews">
+	  <el-tab-pane label="新闻资讯">
+	  	<ul class="tab-con-ul">
 	  		<li class="text-hide"
-				v-for="(item,index) in leftNews"
+				v-for="(item,index) in rightNews"
 				:key="index"
 	  			@click="newsView(item.id)">
 	  			<i class="el-icon-arrow-right"></i>{{item.title}}
 	  		</li>
 	  	</ul>
 	  </el-tab-pane>
-	  <el-tab-pane label="新闻资讯">
-	  	<ul class="tab-con-ul">
+	  <el-tab-pane label="网站公告">
+	  	<ul class="tab-con-ul" v-loading="isnews">
 	  		<li class="text-hide"
-				v-for="(item,index) in rightNews"
+				v-for="(item,index) in leftNews"
 				:key="index"
 	  			@click="newsView(item.id)">
 	  			<i class="el-icon-arrow-right"></i>{{item.title}}
@@ -37,8 +37,8 @@
 			this.getNews();
 		},
 		methods:{
-			newsView(){
-				this.$router.push({path:"/newsCenter/1"})
+			newsView(id){
+				this.$router.push({path:"/newsCenter/"+id})
 			},
 			getNews(){
 				this.isnews=true;

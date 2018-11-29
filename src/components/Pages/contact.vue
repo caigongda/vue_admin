@@ -11,8 +11,9 @@
 						您的位置：首页 > {{curpath}}
 					</el-row>
 					<el-row class="common-content-wrap">
-        				<p>地址；温州市</p>
-						<p>电话；18888888888</p>
+						<p>移动、三连号、优选号码、靓号、回收抵押，（接短信群发业务）</p>
+        				<p>地址：温州市</p>
+						<p>电话：18357777655</p>
 					</el-row>
 				</el-row>
 			</el-col>
@@ -59,7 +60,7 @@ $bg:#F32613;
 	}
 	.common-content-wrap{
 		p{
-			font-size:12px;
+			font-size:16px;
 		}
 	}
 </style>

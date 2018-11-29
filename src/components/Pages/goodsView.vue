@@ -8,7 +8,13 @@
 			<el-col :span="18">
 				<el-row class="num-cen-wrap">
 					<el-row class="num-cen-header">
-						您的位置：首页 > {{curpath}}
+						<span>您的位置：首页 > {{curpath}}</span>
+						<el-popover
+						    placement="bottom"
+						    trigger="click">
+						    <span>分享链接：<span style="color: blue"><a target="blank" :href="shareurl">{{shareurl}}</a></span></span>
+						    <el-button type="text" slot="reference" style="float:right;margin-right: 10px;color: #F32613">分享<i class="icon icon-share"></i></el-button>
+						</el-popover>
 					</el-row>
 					<el-row class="common-content-goods" v-loading="isviewgoods">
 						<ul class="goods-info-wrap">
@@ -30,7 +36,7 @@
 									免费送 
 									<span style="color:#009C42;font-size: 18px;">¥{{numberinfo.calls}}</span> 元
 								</div>
-								<div><span class="row-name">联系电话：</span>157-5777-6888</div>
+								<div><span class="row-name">联系电话：</span>18357777655</div>
 							</li>
 							<li>
 								<div>
@@ -41,20 +47,20 @@
 									<span class="row-name">年限：</span>
 									<span style="color:#009C42;font-size: 18px;">{{numberinfo.term_id}}年</span>
 								</div>
-								<div><span class="row-name">联系电话：</span>151-67890-222</div>
+								<div><span class="row-name">联系电话：</span>18357777655</div>
 							</li>
 							<li>
 								<div><span class="row-name">归属：</span>{{numberinfo.area_id}}</div>
 								<div>
 									<span class="row-name">运营商：</span>
-									<img src="@/assets/chinamobile.png" style="width:20px;height:20px;"></img>{{numberinfo.operator_id}}
+									{{numberinfo.operator_id}}
 								</div>
 								<div>
 									<span class="row-name">微信客服：</span> 
 									<el-popover
 									    placement="top-start"
 									    trigger="hover">
-									    <img src="@/assets/person.jpg" style="width:276px;height:382px;" />
+									    <img src="@/assets/person.jpg" style="width:276px;height:276px;" />
 										<div slot="reference" style="width: auto;"><img src="@/assets/wechat.png" style="width:36px;height:36px;margin-right:5px"></img>
 										扫描二维码
 										</div>
@@ -63,7 +69,7 @@
 							</li>
 							<li>
 								<span><span class="row-name">申明：</span>本站号码一律身份证实名上户，人证一致！</span>
-								<div><span class="row-name">联系QQ：</span>1053816891</div>
+								<div><span class="row-name">联系QQ：</span>1131705050<span class="icon icon-qq" @click="gotoqq"></span></div>
 							</li>
 							<li>
 								<span style="text-align:left;display:flex">
@@ -87,7 +93,7 @@
 				<el-row class="num-cen-wrap">
 					<el-row class="num-cen-header">
 						如果亲喜欢：
-						<span style="color:#009C42;font-size: 18px;">18858838383</span>这个号码，免费提交以下预订资料-》客服稍后会回电！
+						<span style="color:#009C42;font-size: 18px;">{{numberinfo.number}}</span>这个号码，免费提交以下预订资料-》客服稍后会回电！
 					</el-row>
 					<el-row>
 						<el-form 
@@ -102,13 +108,13 @@
 						    <el-input v-model="buyForm.username" placeholder="姓名"></el-input>
 						  </el-form-item>
 						  <el-form-item label="联系电话：" prop="usertel">
-						  	<el-input v-model="buyForm.usertel" placeholder="电话"></el-input>
+						  	<el-input v-model="buyForm.usertel" placeholder="联系电话"></el-input>
 						  </el-form-item>
 						  <el-form-item label="收货地址：" prop="place">
 						    <el-input v-model="buyForm.place" placeholder="收货地址"></el-input>
 						  </el-form-item>
 						  <el-form-item label="QQ/微信：" prop="contact">
-						  	<el-input v-model="buyForm.contact" placeholder="联系QQ或微信号"></el-input>
+						  	<el-input v-model="buyForm.contact" placeholder="QQ或微信号"></el-input>
 						  </el-form-item>
 						  <el-form-item label="套餐及留言：" style="width:100%;" prop="marks">
 						  	<el-input type="textarea" v-model="buyForm.marks"></el-input>
@@ -193,6 +199,12 @@
 		computed:{
 			curpath(){
 				return this.$route.name
+			},
+			userinfo(){
+				return this.getuserinfo();
+			},
+			shareurl(){
+				return "http://share.57110086.com?id="+this.numberinfo.id;
 			}
 		},
 		created(){
@@ -223,34 +235,44 @@
 		        this.code = code;
 		    },
 			onSubmit(formName){
-				this.$refs[formName].validate((valid) => {
-		          if (valid) {
-		          	if (!this.isrepeat) {
-		          		this.isbuynumber=true;
-		            /*if (storage.getItem("username")) {*/
-		            	let postparams=Object.assign({}, this.buyForm,{number:this.numberinfo.number},{phone_id:this.$route.params.id});
-		            	delete postparams.code;
-		            	this.$axios.post(this.$api.addNumber,this.$qs.stringify(postparams)).then(res=>{
-		            		this.isbuynumber=false;
-		            		if (res.data) {
-		            			this.isrepeat=true;
-		            			this.$message({
-									type:"success",
-									message:"添加成功！"
-								});
-		            		}
-		            	})
-		           /* }*/
-		            }else{
-		            	this.$message({
-							type:"warning",
-							message:"已经提交了哦！"
-						});
-		            }
-		          } else {
-		            return false;
-		          }
-		        });
+				if (this.userinfo) {
+					this.$refs[formName].validate((valid) => {
+			          if (valid) {
+			          	if (!this.isrepeat) {
+			          		this.isbuynumber=true;
+			            /*if (storage.getItem("username")) {*/
+			            	let postparams=Object.assign({}, this.buyForm,{number:this.numberinfo.number,user_id:this.userinfo.id,phone_id:this.$route.params.id});
+			            	delete postparams.code;
+			            	this.$axios.post(this.$api.addNumber,this.$qs.stringify(postparams)).then(res=>{
+			            		this.isbuynumber=false;
+			            		if (res.data) {
+			            			this.isrepeat=true;
+			            			this.$message({
+										type:"success",
+										message:"添加成功！"
+									});
+			            		}
+			            	})
+			           /* }*/
+			            }else{
+			            	this.$message({
+								type:"warning",
+								message:"已经提交了哦！"
+							});
+			            }
+			          } else {
+			            return false;
+			          }
+			        });
+		        }else{
+		        	this.$message({
+						type:"warning",
+						message:"您还没有登陆哦！"
+					});
+		        }
+			},
+			gotoqq(){
+				window.open('http://wpa.qq.com/msgrd?v=3&uin='+1131705050+'&site=qq&menu=yes')
 			},
 			resetForm() {
 		        this.$refs['buyForm'].resetFields();
@@ -342,5 +364,9 @@
 		 	background:#ddd;
 		 	color:blue;
 		 }
+	}
+	.icon-qq{
+		margin-left:10px;
+		cursor:pointer;
 	}
 </style>

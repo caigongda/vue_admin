@@ -3,28 +3,37 @@
 		<div>
 			<el-popover
 			    placement="left"
-			    title="靓号"
 			    trigger="hover">
-			    <img src="@/assets/person.jpg" style="width:276px;height:382px;" />
-				<el-button slot="reference" type="primary" circle>靓</el-button>
+			    <div>
+			    	<h2 class="fixed-title" style="color: red;">靓号回收</h2>
+			    	<p style="padding: 0;text-align: center;">请扫下方二维码</p>
+			    	<img src="@/assets/person.jpg" style="width:276px;height:276px;" />
+			    </div>
+				<el-button slot="reference" type="primary" circle>收</el-button>
 			</el-popover>
 		</div>
 		<div>
 			<el-popover
 			    placement="left"
-			    title="靓号"
 			    trigger="hover">
-			    <img src="@/assets/person.jpg" style="width:276px;height:382px;" />
-				<el-button slot="reference" type="primary" circle>靓</el-button>
+			    <div>
+			    	<h2 class="fixed-title" style="color: red;">靓号抵押</h2>
+			    	<p style="padding: 0;text-align: center;">请扫下方二维码</p>
+			    	<img src="@/assets/person.jpg" style="width:276px;height:276px;" />
+			    </div>
+				<el-button slot="reference" type="primary" circle>押</el-button>
 			</el-popover>
 		</div>
 		<div>
 			<el-popover
 			    placement="left"
-			    title="靓号"
 			    trigger="hover">
-			    <img src="@/assets/person.jpg" style="width:276px;height:382px;" />
-				<el-button slot="reference" type="primary" circle>靓</el-button>
+			    <div>
+			    	<h2 class="fixed-title" style="color: red;">靓号出租</h2>
+			    	<p style="padding: 0;text-align: center;">请扫下方二维码</p>
+			    	<img src="@/assets/person.jpg" style="width:276px;height:276px;" />
+			    </div>
+				<el-button slot="reference" type="primary" circle>租</el-button>
 			</el-popover>
 		</div>
 	</div>

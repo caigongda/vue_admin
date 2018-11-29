@@ -4,13 +4,18 @@
 	  	<Header/>
 	    <NavBar></NavBar>
 	    <el-container style="width:100%;min-width:1280px;">
-	    	<keep-alive>
+	    	<keep-alive exclude="membercenter">
 	      		<router-view></router-view>
 	      	</keep-alive>
 	    </el-container>
 	    <el-footer class="app-footer">
-	    	<p>大量靓号转让、求购信息，尽在温州号码网！可查看手机靓号等交易信息！友情链接：</p>
-	    	<p>Copyright © 2018 All Rights Reserved 技术支持：</p>
+	    	<p>大量靓号转让、求购信息，尽在温州号码网！可查看手机靓号等交易信息！
+	    		<span v-if="geturl.length>0">友情链接：
+	    			<span class="purl-wrap" v-for="(item,index) in geturl" @click="gotourl(item.url)">{{item.name}}
+	    			</span>
+	    		</span>
+	    	</p>
+	    	<p>Copyright © 2018 浙ICP备18037328号-2 All Rights Reserved </p>
 	    </el-footer>
 	    <Fixedbar/>
 	</el-container>
@@ -19,19 +24,26 @@
 <script>
 	import NavBar from '@/components/NavBar';
 	import Header from '@/components/Header';
-	import Footer from '@/components/Footer';
 	import Fixedbar from '@/components/Pages/fixedbar';
 	export default{
 		name:"Index",
-		components:{NavBar,Header,Footer,Fixedbar},
+		components:{NavBar,Header,Fixedbar},
 		computed:{
 			percent(){
 				return this.$store.getters.GetPercent
+			},
+			geturl(){
+				return this.$store.getters.GetUrl
 			}
 		},
 		data(){
 			return{
 
+			}
+		},
+		methods:{
+			gotourl(url){
+				window.open(url);
 			}
 		}
 	}
@@ -60,5 +72,10 @@
     		font-size: 12px;
     		color:#000;
     	}
+	}
+	.purl-wrap{
+		color:blue;
+		cursor: pointer;
+		margin-right:5px;
 	}
 </style>

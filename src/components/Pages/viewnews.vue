@@ -11,7 +11,7 @@
 						您的位置：首页 > {{curpath}}
 					</el-row>
 					<el-row class="common-content-wrap" v-loading="isviewnews">
-						<el-row class="news-title">
+						<el-row class="view-news-title">
 							<h4>{{newsinfo.title}}</h4>
 							<div>发布时间:<span class="new-time">{{newsinfo.newstime | parsetime}}</span></div>
 						</el-row>
@@ -62,7 +62,6 @@
 		},
 		created(){
 				this.getNewsInfo(this.$route.params.id)
-				//console.log(this.$route);
 		},
 		filters:{
 			parsetime(time){
@@ -100,11 +99,12 @@
 				let id=this.$route.params.id;
 				this.isviewnews=true;
 				this.$axios.post(this.$api.viewNews,this.$qs.stringify({id:id})).then(res=>{
-					this.isviewnews=false;
-					this.newsinfo=res.data.curnews;
-					this.prevnews=res.data.prevnews;
-					this.nextnews=res.data.nextnews;
-					console.log(res);
+					if (res.data!="") {
+						this.isviewnews=false;
+						this.newsinfo=res.data.curnews;
+						this.prevnews=res.data.prevnews;
+						this.nextnews=res.data.nextnews;
+					}
 				})
 			},
 			viewnews(id){
@@ -149,7 +149,7 @@
     		margin-bottom:5px;
     	}
 	}
-	.news-title{
+	.view-news-title{
 		padding-bottom:10px;
 		border-bottom:1px solid #ddd;
 		h4{

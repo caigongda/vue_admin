@@ -17,7 +17,7 @@
 				  </el-form-item>
 				  <el-form-item prop="password">
 				  	  <el-input
-					    placeholder="用户名"
+					    placeholder="密码"
 					    type="password"
 					    v-model="loginForm.password">
 					    <i slot="prefix" class="icon icon-pass"></i>
@@ -61,8 +61,8 @@
 			},
 			submitForm(formName){
 				this.$refs[formName].validate((valid) => {
-          			if (valid) {
-          				this.islogin=true;
+          			if (valid) {          				this.islogin=true;
+
           				this.$axios.post(this.$api.login,this.$qs.stringify(this.loginForm)).then(res=>{
 							if (res.data.status==200) {
 								this.islogin=false;
@@ -71,8 +71,9 @@
 									type:"success",
 									message:"登录成功"
 								});
-								this.$router.push({path:"/index"});
+								this.resetForm('ruleForm2');
 								window.location.reload();
+								this.$router.push({path:"/index"});
 							}else{
 								this.islogin=false;
 								this.$message({

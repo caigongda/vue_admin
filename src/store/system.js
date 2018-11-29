@@ -5,6 +5,7 @@ const systemConfig = {
       username:"",
       specilnumber:[],
       userinfo:{},
+      urls:[]
   },
   getters: {
       GetPercent(state){
@@ -15,6 +16,9 @@ const systemConfig = {
       },
       GetUserinfo(state){
         return state.userinfo;
+      },
+      GetUrl(state){
+        return state.urls;
       }
   },
   mutations: {
@@ -26,6 +30,9 @@ const systemConfig = {
     },
     SET_USERINFO(state,data){
       state.userinfo=data;
+    },
+    SET_URL(state,data){
+      state.urls=data;
     }
   },
   actions: {
@@ -38,6 +45,9 @@ const systemConfig = {
     Setuserinfo({commit},data){
       let result=JSON.parse(data);
       commit('SET_USERINFO',result)
+    },
+    Seturl({commit},data){
+      commit('SET_URL',data)
     }
   }
 }

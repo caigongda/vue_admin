@@ -16,20 +16,20 @@
 					</el-row>
 					<el-row class="common-content-wrap" v-loading="isallnews" v-if="curindex==1">
 						<ul class="user-info-wrap">
-							<li><span>用户名称：</span><span>{{userinfo.nickname}}</span></li>
+							<li><span>用户名称：</span><span>{{userinfo?userinfo.nickname:""}}</span></li>
 							<li><span>真实姓名：</span><span>
 								<input type="text" name="" v-model="username" /></span></li>
 							<li><span>用户密码：</span><span>
 								<input type="password" name="" v-model="password" /></span></li>
 							<li><span>重复用户密码：</span><span>
 								<input type="password" name="" v-model="repass" /></span></li>
-							<li><span>密码保护问题：</span><span>{{userinfo.problem}}</span></li>
+							<li><span>密码保护问题：</span><span>{{userinfo?userinfo.problem:""}}</span></li>
 							<li><span>密码保护答案：</span><span>已隐藏(不可修改)</span></li>
 							<li><span>手机号码：</span><span>
 								<input type="text" name="" v-model="mobile" /></span></li>
-							<li><span>注册时间：</span><span>{{userinfo.createtime}}</span></li>
-							<li><span>最后登录时间：</span><span>{{userinfo.logintime}}</span></li>
-							<li><span>最后登录IP：</span><span>{{userinfo.loginip}}</span></li>
+							<li><span>注册时间：</span><span>{{userinfo?userinfo.createtime:"" | parsetime}}</span></li>
+							<li><span>最后登录时间：</span><span>{{userinfo?userinfo.logintime:"" | parsetime}}</span></li>
+							<li><span>最后登录IP：</span><span>{{userinfo?userinfo.loginip:""}}</span></li>
 							<li><span>验证码：</span><span>
 								<input v-model="usercode"></input>
 								<span class="num-code unselectable" @click="createCode">{{code}}</span>
@@ -41,7 +41,8 @@
 						<el-row v-if="orderlist.length!=0" v-for="(item,index) in orderlist" :key="index">
 							<h3 class="post-header">
 							<span style="color:#F32613">{{item.number}}</span> 订购时间：
-							<span>{{item.createtime}}</span>
+							<span>{{item.createtime | parsetime}}</span>
+							<span>{{item.status | parseStatus}}</span>
 							</h3>
 							<div class="post-info">
 								<p>联 系 人：{{item.name}}</p>
@@ -50,11 +51,11 @@
 								<p>QQ/微信：{{item.qq}}</p>
 							</div>
 						</el-row>
-						<el-row v-else>
+						<el-row v-if="orderlist.length==0">
 							<p>暂无数据</p>
 						</el-row>
 						<el-row class="post-footer">
-							共<span style="color:#F32613">1</span>条记录
+							共<span style="color:#F32613">{{total}}</span>条记录
 						</el-row>
 					</el-row>
 				</el-row>
@@ -67,6 +68,7 @@
 	import Specilnum from "@/components/pubcomponents/specilnum";
 	export default{
 		components:{Pubtab,Specilnum},
+		name:"membercenter",
 		data(){
 			return{
 				total:0,
@@ -78,10 +80,10 @@
 					pagecount:15,
 				},
 				curaction:"会员中心",
-				username:this.getuserinfo().username,
+				username:this.getuserinfo()?this.getuserinfo().username:"",
 				password:"",
 				repass:"",
-				mobile:this.getuserinfo().mobile,
+				mobile:this.getuserinfo()?this.getuserinfo().mobile:"",
 				usercode:"",
 				isedit:false,
 				curindex:1,
@@ -97,9 +99,17 @@
 				return this.getuserinfo();
 			}
 		},
+		created(){
+			if (!this.getuserinfo()) {
+				this.$message({
+		          message: '你还没有登录哦！',
+		          type: 'warning'
+		        });
+		        this.$router.push({path:"/index"});
+			}
+		},
 		mounted(){
 			this.createCode();
-			console.log(this.userinfo)
 			//this.getallnews();
 		},
 		filters:{
@@ -129,6 +139,14 @@
 			    	return time;
 			    }
 			},
+			parseStatus(val){
+				let status={
+					'normal':'成交',
+					'hidden':'申请中',
+					'deleted':'未成交'
+				};
+				return status[val];
+			}
 		},
 		methods:{
 			editinfo(index){
@@ -139,9 +157,10 @@
 				this.curaction='我的订单';
 				this.curindex=index;
 				this.isorder=true;
-				this.$axios.post(this.$api.getOrders,this.$qs.stringify({id:this.userinfo.id})).then(res=>{
+				this.$axios.post(this.$api.getOrders,this.$qs.stringify({user_id:this.userinfo.id})).then(res=>{
 					this.isorder=false;
 					this.orderlist=res.data;
+					this.total=res.data.length;
 				})
 			},
 			checkinfo(){
@@ -190,14 +209,6 @@
 					})
 				}
 			},
-			getallnews(){
-				this.isallnews=true;
-				this.$axios.post(this.$api.getallNews,this.$qs.stringify(this.query)).then(res=>{
-					this.isallnews=false;
-					this.newList=res.data.news;
-					this.total=res.data.total;
-				})
-			},
 			createCode(){
 		        let code = '';
 		        let codeLength = 4;
@@ -208,20 +219,12 @@
 		        }
 		        this.code = code;
 		    },
-			handleSizeChange(val){//每页容量切换
-				this.query.pagecount=val;
-				this.getallnews();
-			},
-			handleCurrentChange(val){//页码切换
-				this.query.page=val;
-
-			},
 			viewnews(id){
 				this.$router.push({path:"/newsCenter/"+id})
 			},
 			loginout(){
 				window.localStorage.clear();
-				this.$router.push({path:"/index"})
+				window.location.reload();
 			}
 		}
 	}
